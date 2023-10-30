@@ -3,6 +3,7 @@ import { prisma } from "../db";
 
 import MessageResponse from "../interfaces/MessageResponse";
 import emojis from "./emojis";
+import authRoute from "./auth/authRoute"
 
 const router = express.Router();
 
@@ -18,5 +19,7 @@ router.get<{}>("/", async (req, res) => {
 });
 
 router.use("/emojis", emojis);
+router.use("/auth", authRoute)
+
 
 export default router;
