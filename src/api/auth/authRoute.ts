@@ -2,4 +2,9 @@ import express from "express";
 
 const router = express.Router();
 
-export default router
+router.post<{ name: string; email: string; password: string }>(
+  "/register",
+  (req, res) => {},
+);
+
+export default router;
