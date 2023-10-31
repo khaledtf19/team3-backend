@@ -67,7 +67,6 @@ model Course {
   coursProgress  CoursProgress[]
   Student        Student[]
   courseReviews  CoursReview[]
-  categories     Category[]
   subCategories  SubCategory[]
   courseSteps    CourseStep[]
   createdAt      DateTime        @default(now())
@@ -89,7 +88,7 @@ model CourseStep {
   title     String
   content   String
   Course    Course?  @relation(fields: [courseId], references: [id])
-  courseId  String?
+  courseId  String
   video     Video?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -101,18 +100,18 @@ model Video {
   title        String?
   description  String?
   courseStep   CourseStep? @relation(fields: [courseStepId], references: [id])
-  courseStepId String?     @unique
+  courseStepId String      @unique
 }
 
 model Category {
   id            String        @id @default(uuid())
-  Course        Course?       @relation(fields: [courseId], references: [id])
-  courseId      String?
+  name          String        @unique
   subCategories SubCategory[]
 }
 
 model SubCategory {
   id         String    @id @default(uuid())
+  name       String    @unique
   Course     Course?   @relation(fields: [courseId], references: [id])
   courseId   String?
   category   Category? @relation(fields: [categoryId], references: [id])
