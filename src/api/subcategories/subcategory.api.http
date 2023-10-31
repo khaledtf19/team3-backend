@@ -1,0 +1,21 @@
+# =========== Testing subcategories routes via REST client =========== #
+@host = http://localhost:5000/api/v1/subcategories
+@query = name=farid&last=ahizoune
+@body = {"name": "Phalone V1", "categoryId": "83a7d586-519d-46f6-8fdf-870de3f10cf8"}
+
+### Get all subcategories
+GET {{host}}?{{query}}
+### Get a category by ID
+GET {{host}}/0231beb1-39ed-4b44-b3c4-a9fbdbd3741f
+### Delete a category by ID
+DELETE {{host}}/46fb7a84-ebef-43ce-8dc1-81073c72cad7
+### Update a category
+PUT {{host}}/0231beb1-39ed-4b44-b3c4-a9fbdbd3741f
+Content-Type: application/json
+
+{{body}}
+### Create a subcategory
+POST {{host}}/
+Content-Type: application/json
+
+{{body}}

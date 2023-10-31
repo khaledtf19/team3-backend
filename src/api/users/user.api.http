@@ -1,0 +1,31 @@
+# =========== Testing users routes via REST client =========== #
+@host = http://localhost:5000/api/v1/users
+@query = name=farid&last=ahizoune
+@body = {"email": "khaledtf20@gmail.com","password": "123456","fullName": "Mr Khaled","adress": "N 17 appt 20","city": "Raat","country": "Morocco"}
+
+### Get all users
+GET {{host}}?{{query}}
+### Get a user by ID
+GET {{host}}/3aae5398-8cfe-450e-9ca2-0d19451bbaaa
+### Delete a user by ID
+DELETE {{host}}/b5421ad4-c905-4dfb-b4e6-8bf0fb93d02e
+### Update a user
+PUT {{host}}/3aae5398-8cfe-450e-9ca2-0d19451bbaaa
+Content-Type: application/json
+
+{ "email": "Farid1@gmail.com",
+  "password": "111111",
+  "fullName": "Mr Fredy",
+  "adress": "N 17 appt 07",
+  "city": "Rabat",
+  "country": "Morocco"}
+### Create a user
+POST {{host}}/
+Content-Type: application/json
+
+{ "email": "user1@gmail.com",
+  "password": "123456",
+  "fullName": "Mr Farid",
+  "adress": "N 17 appt 20",
+  "city": "Rabat",
+  "country": "Morocco"}

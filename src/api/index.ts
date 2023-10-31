@@ -1,22 +1,13 @@
-import express from "express";
-import { prisma } from "../db";
+import express from 'express';
 
-import MessageResponse from "../interfaces/MessageResponse";
-import emojis from "./emojis";
+import userRoutes from './users/user.route';
+import categoryRoutes from './categories/category.route';
+import subCategoryRoutes from './subcategories/subcategory.route';
 
 const router = express.Router();
 
-router.get<{}>("/", async (req, res) => {
-  const newUser = await prisma.user.create({
-    data: {
-      email: "khaledtf19@gmail.com",
-    },
-  });
-  console.log(newUser);
-
-  res.json({ user: newUser });
-});
-
-router.use("/emojis", emojis);
+router.use('/users', userRoutes);
+router.use('/categories', categoryRoutes);
+router.use('/subcategories', subCategoryRoutes);
 
 export default router;

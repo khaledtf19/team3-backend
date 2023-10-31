@@ -1,0 +1,21 @@
+# =========== Testing categories routes via REST client =========== #
+@host = http://localhost:5000/api/v1/categories
+@query = name=farid&last=ahizoune
+@body = {"name": "Phys V3"}
+
+### Get all categories
+GET {{host}}?{{query}}
+### Get a category by ID
+GET {{host}}/83a7d586-519d-46f6-8fdf-870de3f10cf8
+### Delete a category by ID
+DELETE {{host}}/b5421ad4-c905-4dfb-b4e6-8bf0fb93d02e
+### Update a category
+PUT {{host}}/83a7d586-519d-46f6-8fdf-870de3f10cf8
+Content-Type: application/json
+
+{{body}}
+### Create a category
+POST {{host}}/
+Content-Type: application/json
+
+{{body}}
