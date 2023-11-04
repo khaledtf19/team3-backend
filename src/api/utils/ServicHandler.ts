@@ -1,13 +1,13 @@
-import { PrismaClient } from '@prisma/client';
-import { Request, Response, NextFunction } from 'express';
-import { prisma } from '../db';
+import { PrismaClient } from "@prisma/client";
+import { Request, Response, NextFunction } from "express";
+import { prisma } from "../../db";
 import {
   convertSortToObject,
   convertFieldsToObject,
   convertKeywordsToObject,
   convertFiltersToObject,
-  pagingsObject,
-} from './Helpers';
+  pagingsObject
+} from "./Helpers";
 
 export const createOne: any =
   (model: keyof PrismaClient) =>
@@ -74,27 +74,27 @@ export const getAll: any =
     const { skip, take, paging } = await pagingsObject(count, req.query);
     // Apply filters
     let data = await dynamicModel.findMany({
-      where: convertFiltersToObject(filters, String(model)),
+      where: convertFiltersToObject(filters, String(model))
     });
 
     // Apply fields selection
     if (fields) {
       data = await dynamicModel.findMany({
-        select: convertFieldsToObject(String(fields)),
+        select: convertFieldsToObject(String(fields))
       });
     }
 
     // Apply sorting
     if (sort) {
       data = await dynamicModel.findMany({
-        orderBy: convertSortToObject(String(sort)),
+        orderBy: convertSortToObject(String(sort))
       });
     }
 
     // Apply search
     if (keywords) {
       data = await dynamicModel.findMany({
-        wher: convertKeywordsToObject(String(keywords)),
+        wher: convertKeywordsToObject(String(keywords))
       });
     }
 
@@ -104,6 +104,6 @@ export const getAll: any =
     return res.status(200).json({
       message: `${name}(s) returned successfully`,
       paging,
-      data,
+      data
     });
   };

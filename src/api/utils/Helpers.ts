@@ -1,18 +1,19 @@
-import { validFields } from './validFields';
+import { validFields } from "./validFields";
 
 export const convertSortToObject = (
+  // eslint-disable-next-line @typescript-eslint/comma-dangle
   sortingString: string
 ): Record<string, string> => {
-  const sortingCriteria = sortingString.split('&');
+  const sortingCriteria = sortingString.split("&");
   const sortingObject: Record<string, string> = {};
 
   sortingCriteria.forEach((criteria) => {
     let field = criteria;
-    let direction = 'asc';
+    let direction = "asc";
 
-    if (criteria.startsWith('-')) {
+    if (criteria.startsWith("-")) {
       field = criteria.slice(1);
-      direction = 'desc';
+      direction = "desc";
     }
 
     sortingObject[field] = direction;
@@ -24,7 +25,7 @@ export const convertSortToObject = (
 export const convertFieldsToObject = (
   fieldsString: string
 ): Record<string, boolean> => {
-  const fieldsCriteria = fieldsString.split('&');
+  const fieldsCriteria = fieldsString.split("&");
   const fieldsObject: Record<string, boolean> = {};
 
   fieldsCriteria.forEach((criteria) => {
@@ -39,21 +40,21 @@ export const convertFieldsToObject = (
 export const convertKeywordsToObject = (
   fieldsString: string
 ): Record<string, any> => {
-  const fieldsCriteria = fieldsString.split('&');
+  const fieldsCriteria = fieldsString.split("&");
 
   return fieldsCriteria.map((word) => ({
     OR: [
       {
         title: {
           search: word,
-          mode: 'insensitive',
-        },
+          mode: "insensitive"
+        }
       },
       {
         description: {
           search: word,
-          mode: 'insensitive',
-        },
+          mode: "insensitive"
+        }
       },
       {
         courseSteps: {
@@ -62,20 +63,20 @@ export const convertKeywordsToObject = (
               {
                 title: {
                   search: word,
-                  mode: 'insensitive',
-                },
+                  mode: "insensitive"
+                }
               },
               {
                 content: {
                   search: word,
-                  mode: 'insensitive',
-                },
-              },
-            ],
-          },
-        },
-      },
-    ],
+                  mode: "insensitive"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
   }));
 };
 
@@ -83,7 +84,7 @@ export const convertFiltersToObject = (
   queryParams: Record<string, any>,
   model: string
 ) => {
-  console.log('Query before', queryParams);
+  console.log("Query before", queryParams);
 
   const filteredFilters = Object.keys(queryParams).filter((key) =>
     validFields[String(model)].includes(key)
@@ -102,30 +103,30 @@ export const convertFiltersToObject = (
       const value = filteredFiltersObject[key];
 
       // Check if the key contains a filter criterion
-      if (key.includes('[') && key.includes(']')) {
-        const [field, operator] = key.split('[');
+      if (key.includes("[") && key.includes("]")) {
+        const [field, operator] = key.split("[");
         const criterion = operator.substring(0, operator.length - 1);
 
         // Check the criterion and set the filter accordingly
-        if (criterion === 'gte') {
+        if (criterion === "gte") {
           prismaFilter[field] = { gte: value };
-        } else if (criterion === 'lte') {
+        } else if (criterion === "lte") {
           prismaFilter[field] = { lte: value };
-        } else if (criterion === 'gt') {
+        } else if (criterion === "gt") {
           prismaFilter[field] = { gt: value };
-        } else if (criterion === 'lt') {
+        } else if (criterion === "lt") {
           prismaFilter[field] = { lt: value };
-        } else if (criterion === 'eq') {
+        } else if (criterion === "eq") {
           prismaFilter[field] = value;
-        } else if (key === 'contains') {
+        } else if (key === "contains") {
           prismaFilter[key] = { contains: value };
-        } else if (key === 'startsWith') {
+        } else if (key === "startsWith") {
           prismaFilter[key] = {
-            startsWith: value,
+            startsWith: value
           };
-        } else if (key === 'endsWith') {
+        } else if (key === "endsWith") {
           prismaFilter[key] = {
-            endsWith: value,
+            endsWith: value
           };
         } else {
           prismaFilter[key] = value;
@@ -155,6 +156,6 @@ export const pagingsObject = async (
   return {
     skip,
     take: Number(limit),
-    paging,
+    paging
   };
 };
