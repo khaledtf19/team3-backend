@@ -7,15 +7,162 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id     String @id @default(cuid())
-  title  String
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  password     String
+  fullName     String
+  imgCover     String?
+  adress       String?
+  city         String?
+  country      String?
+  wallet       Int      @default(0)
+  role         Role     @default(STUDENT)
+  isAdmin      Boolean  @default(false)
+  admin        Admin?
+  teacher      Teacher?
+  student      Student?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  refreshToken Token[]
 }
 
-model User {
-  id    String @id @default(cuid())
-  email String
-  posts Post[]
+model Token {
+  id     String   @id @default(uuid())
+  user   User     @relation(fields: [userId], references: [id])
+  userId String   @unique
+  token  String
+  date   DateTime @default(now())
+}
+
+model Admin {
+  id       String  @id @default(uuid())
+  isSupper Boolean @default(false)
+  user     User    @relation(fields: [userId], references: [id])
+  userId   String  @unique
+}
+
+model Student {
+  id             String          @id @default(uuid())
+  user           User            @relation(fields: [userId], references: [id])
+  userId         String          @unique
+  CoursProgress  CoursProgress[]
+  favoritCourses Course[]
+  TeacherReview  TeacherReview[]
+  CoursReview    CoursReview[]
+}
+
+model CoursProgress {
+  id         String   @id @default(uuid())
+  student    Student  @relation(fields: [studentId], references: [id])
+  studentId  String
+  cours      Course   @relation(fields: [coursId], references: [id])
+  coursId    String
+  stage      Int      @default(0)
+  isFinished Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+// ================= Courses tables =================
+model Course {
+  id             String          @id @default(uuid())
+  teacher        Teacher         @relation(fields: [teacherId], references: [id])
+  teacherId      String
+  title          String
+  description    String
+  imgCover       String?
+  published      Boolean?        @default(false)
+  price          Int             @default(0)
+  hasCertificate Boolean         @default(false)
+  coursProgress  CoursProgress[]
+  Student        Student[]
+  courseReviews  CoursReview[]
+  subCategories  SubCategory[]
+  courseSteps    CourseStep[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model CoursReview {
+  id        String   @id @default(uuid())
+  course    Course   @relation(fields: [courseId], references: [id])
+  courseId  String   @unique
+  student   Student  @relation(fields: [studentId], references: [id])
+  studentId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CourseStep {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  Course    Course?  @relation(fields: [courseId], references: [id])
+  courseId  String
+  imgCover  String?
+  video     Video?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Video {
+  id           String      @id @default(uuid())
+  duration     Int         @default(0) // length of the video in minutes
+  title        String?
+  description  String?
+  courseStep   CourseStep? @relation(fields: [courseStepId], references: [id])
+  courseStepId String      @unique
+  videoLink    String
+}
+
+model Category {
+  id            String        @id @default(uuid())
+  name          String        @unique
+  subCategories SubCategory[]
+}
+
+model SubCategory {
+  id         String    @id @default(uuid())
+  name       String    @unique
+  Course     Course?   @relation(fields: [courseId], references: [id])
+  courseId   String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+}
+
+// ================= Teachers tables =================
+model Teacher {
+  id            String          @id @default(uuid())
+  user          User            @relation(fields: [userId], references: [id])
+  userId        String          @unique
+  courses       Course[]
+  skills        Skills[]
+  teacherReview TeacherReview[]
+}
+
+model Skills {
+  id        String   @id @default(uuid())
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+  teacherId String
+  pourcent  Int      @default(100)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TeacherReview {
+  id        String   @id @default(uuid())
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+  teacherId String   @unique
+  student   Student  @relation(fields: [studentId], references: [id])
+  studentId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ====== Enums ======
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
 }
