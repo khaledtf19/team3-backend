@@ -160,7 +160,6 @@ model TeacherReview {
   updatedAt DateTime @updatedAt
 }
 
-// ====== Enums ======
 enum Role {
   ADMIN
   TEACHER
