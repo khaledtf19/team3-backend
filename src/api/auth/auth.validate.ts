@@ -17,5 +17,5 @@ export const registerRequestSchema = z.object({
 
 export const loginRequestSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(255)
+  password: z.string().min(8).max(255)
 })

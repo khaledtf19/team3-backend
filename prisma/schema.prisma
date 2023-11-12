@@ -8,98 +8,112 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  fullName  String
-  adress    String?
-  city      String?
-  country   String?
-  wallet    Int      @default(0)
-  role      Role     @default(STUDENT)
-  isAdmin   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  admin     Admin?
-  student   Student?
-  teacher   Teacher?
+  id           String   @id @default(uuid())
+  email        String   @unique
+  password     String
+  fullName     String
+  imgCover     String?
+  adress       String?
+  city         String?
+  country      String?
+  wallet       Int      @default(0)
+  role         Role     @default(STUDENT)
+  isAdmin      Boolean  @default(false)
+  admin        Admin?
+  teacher      Teacher?
+  student      Student?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  refreshToken Token[]
+}
+
+model Token {
+  id     String   @id @default(uuid())
+  user   User     @relation(fields: [userId], references: [id])
+  userId String   @unique
+  token  String   
+  date   DateTime @default(now())
 }
 
 model Admin {
   id       String  @id @default(uuid())
   isSupper Boolean @default(false)
-  userId   String  @unique
   user     User    @relation(fields: [userId], references: [id])
+  userId   String  @unique
 }
 
 model Student {
   id             String          @id @default(uuid())
+  user           User            @relation(fields: [userId], references: [id])
   userId         String          @unique
   CoursProgress  CoursProgress[]
-  CoursReview    CoursReview[]
-  user           User            @relation(fields: [userId], references: [id])
+  favoritCourses Course[]
   TeacherReview  TeacherReview[]
-  favoritCourses Course[]        @relation("CourseToStudent")
+  CoursReview    CoursReview[]
 }
 
 model CoursProgress {
   id         String   @id @default(uuid())
+  student    Student  @relation(fields: [studentId], references: [id])
   studentId  String
+  cours      Course   @relation(fields: [coursId], references: [id])
   coursId    String
   stage      Int      @default(0)
   isFinished Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  cours      Course   @relation(fields: [coursId], references: [id])
-  student    Student  @relation(fields: [studentId], references: [id])
 }
 
+// ================= Courses tables =================
 model Course {
   id             String          @id @default(uuid())
+  teacher        Teacher         @relation(fields: [teacherId], references: [id])
   teacherId      String
   title          String
   description    String
-  hasCertificate Boolean         @default(false)
-  createdAt      DateTime        @default(now())
-  price          Int             @default(0)
-  updatedAt      DateTime        @updatedAt
+  imgCover       String?
   published      Boolean?        @default(false)
+  price          Int             @default(0)
+  hasCertificate Boolean         @default(false)
   coursProgress  CoursProgress[]
-  courseReviews  CoursReview?
-  teacher        Teacher         @relation(fields: [teacherId], references: [id])
-  courseSteps    CourseStep[]
+  Student        Student[]
+  courseReviews  CoursReview[]
   subCategories  SubCategory[]
-  Student        Student[]       @relation("CourseToStudent")
+  courseSteps    CourseStep[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 }
 
 model CoursReview {
   id        String   @id @default(uuid())
+  course    Course   @relation(fields: [courseId], references: [id])
   courseId  String   @unique
+  student   Student  @relation(fields: [studentId], references: [id])
   studentId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  course    Course   @relation(fields: [courseId], references: [id])
-  student   Student  @relation(fields: [studentId], references: [id])
 }
 
 model CourseStep {
   id        String   @id @default(uuid())
   title     String
   content   String
+  Course    Course?  @relation(fields: [courseId], references: [id])
   courseId  String
+  imgCover  String?
+  video     Video?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Course    Course   @relation(fields: [courseId], references: [id])
-  video     Video?
 }
 
 model Video {
-  id           String     @id @default(uuid())
-  duration     Int        @default(0)
+  id           String      @id @default(uuid())
+  duration     Int         @default(0) // length of the video in minutes
   title        String?
   description  String?
-  courseStepId String     @unique
-  courseStep   CourseStep @relation(fields: [courseStepId], references: [id])
+  courseStep   CourseStep? @relation(fields: [courseStepId], references: [id])
+  courseStepId String      @unique
+  videoLink    String
 }
 
 model Category {
@@ -110,39 +124,40 @@ model Category {
 
 model SubCategory {
   id         String    @id @default(uuid())
-  courseId   String?
-  categoryId String?
   name       String    @unique
-  category   Category? @relation(fields: [categoryId], references: [id])
   Course     Course?   @relation(fields: [courseId], references: [id])
+  courseId   String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
 }
 
+// ================= Teachers tables =================
 model Teacher {
-  id            String         @id @default(uuid())
-  userId        String         @unique
+  id            String          @id @default(uuid())
+  user          User            @relation(fields: [userId], references: [id])
+  userId        String          @unique
   courses       Course[]
   skills        Skills[]
-  user          User           @relation(fields: [userId], references: [id])
-  teacherReview TeacherReview?
+  teacherReview TeacherReview[]
 }
 
 model Skills {
   id        String   @id @default(uuid())
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
   teacherId String
   pourcent  Int      @default(100)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  teacher   Teacher  @relation(fields: [teacherId], references: [id])
 }
 
 model TeacherReview {
   id        String   @id @default(uuid())
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
   teacherId String   @unique
+  student   Student  @relation(fields: [studentId], references: [id])
   studentId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  student   Student  @relation(fields: [studentId], references: [id])
-  teacher   Teacher  @relation(fields: [teacherId], references: [id])
 }
 
 enum Role {
