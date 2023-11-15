@@ -5,7 +5,7 @@ import { z } from "zod";
 import { hash, compare } from "bcrypt";
 import { prisma } from "../../db";
 import jwt from "jsonwebtoken";
-import { getDayDiff } from "../../utils/utils";
+import { authMiddleware, CustomRequest } from "../../middleware/auth";
 const router = express.Router();
 
 router.post<{}, {}, z.infer<typeof registerRequestSchema>>(
@@ -30,6 +30,7 @@ router.post<{}, {}, z.infer<typeof registerRequestSchema>>(
               fullName: req.body.fullName,
               email: req.body.email,
               password: hashedPassword,
+              role: req.body.role,
             },
           },
         },
@@ -42,6 +43,7 @@ router.post<{}, {}, z.infer<typeof registerRequestSchema>>(
               fullName: req.body.fullName,
               email: req.body.email,
               password: hashedPassword,
+              role: req.body.role,
             },
           },
         },
@@ -71,14 +73,14 @@ router.post<{}, {}, z.infer<typeof loginRequestSchema>>(
     const oldToken = await prisma.token.findUnique({
       where: { userId: user.id },
     });
-    console.log(oldToken)
+    console.log(oldToken);
     if (
       oldToken &&
       jwt.verify(oldToken.token, process.env.JWT_SECRET_KEY || "")
     ) {
       return res.status(200).json({ token: oldToken.token });
     }
-    console.log("expired")
+    console.log("expired");
     const tokenString = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET_KEY || "",
@@ -92,5 +94,10 @@ router.post<{}, {}, z.infer<typeof loginRequestSchema>>(
     res.status(200).json({ token: tokenString });
   },
 );
+
+router.get("/me", authMiddleware, (req, res) => {
+  const user = (req as CustomRequest).user;
+  res.status(200).json({ user: user });
+});
 
 export default router;
