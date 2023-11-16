@@ -67,7 +67,7 @@ router.post<{}, {}, z.infer<typeof loginRequestSchema>>(
         .json({ error: `Couldn't find this user '${req.body.email}'` });
     }
 
-    if (!(await compare(req.body.password, user?.password))) {
+    if (!(await compare(req.body.password, user.password))) {
       return res.status(404).json({ error: `Incorrect password` });
     }
     const oldToken = await prisma.token.findUnique({
