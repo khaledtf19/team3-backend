@@ -2,14 +2,14 @@
   "compilerOptions": {
     "outDir": "dist",
     "sourceMap": true,
-    "target": "esnext",
+    "target": "ESNext",
     "module": "commonjs",
     "esModuleInterop": true,
     "lib": ["esnext"],
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
     "strict": true,
-    "types": ["@prisma/client"],
+    "types": ["@prisma/client", "jest"],
     "skipLibCheck": true
   },
   "include": ["./*.js", "src/**/*.ts", "test/**/*.ts"]

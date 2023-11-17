@@ -3,7 +3,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
 
-import * as middlewares from './middlewares';
+import * as middlewares from './middlewares/middlewares';
 import api from './api';
 import MessageResponse from './interfaces/MessageResponse';
 
@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.get<{}, MessageResponse>('/', (req, res) => {
   res.json({
-    message: 'hello from App',
+    message: 'hello from App'
   });
 });
 

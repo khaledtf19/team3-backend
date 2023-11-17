@@ -1,0 +1,23 @@
+# =========== Testing categories routes via REST client =========== #
+@host = http://localhost:5000/api/teachers
+@query = name[startsWith]=S&page=1&limit=3
+@body = {"userId":"40261062-7cc2-4e7b-829d-ea0f8729256c"}
+
+#"40261062-7cc2-4e7b-829d-ea0f8729257c" User ID
+#"58885f7a-92f5-4287-8264-ab4ade63a759" User ID
+### Get all categories
+GET {{host}}
+### Get a category by ID 
+GET {{host}}/33bdee5b-e520-41ed-962a-d45e017b7706
+### Delete a category by ID
+DELETE {{host}}/ccc21050-78e2-4d8e-9e07-b4480d1c78f5
+### Update a category
+PUT {{host}}/83a7d586-519d-46f6-8fdf-870de3f10cf8
+Content-Type: application/json
+
+{{body}}
+### Create a category
+POST {{host}}/
+Content-Type: application/json
+
+{{body}}

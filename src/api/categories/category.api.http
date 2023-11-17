@@ -1,0 +1,21 @@
+# =========== Testing categories routes via REST client =========== #
+@host = http://localhost:5000/api/categories
+@query = name[startsWith]=S&page=1&limit=3
+@body = {"name": "Physe 40"}
+
+### Get all categories
+GET {{host}}
+### Get a category by ID
+GET {{host}}/17c72b2f-ad38-4d38-8e3b-2c193c48b686
+### Delete a category by ID
+DELETE {{host}}/ccc21050-78e2-4d8e-9e07-b4480d1c78f5
+### Update a category
+PUT {{host}}/83a7d586-519d-46f6-8fdf-870de3f10cf8
+Content-Type: application/json
+
+{{body}}
+### Create a category
+POST {{host}}/
+Content-Type: application/json
+
+{{body}}

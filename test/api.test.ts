@@ -8,18 +8,6 @@ describe('GET /api/', () => {
       .get('/api/')
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .expect(200, {
-        message: 'API - 👋🌎🌍🌏',
-      }, done);
-  });
-});
-
-describe('GET /api/emojis', () => {
-  it('responds with a json message', (done) => {
-    request(app)
-      .get('/api/emojis')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect(200, ['😀', '😳', '🙄'], done);
+      .expect(200, { message: 'Hello from the app' }, done);
   });
 });

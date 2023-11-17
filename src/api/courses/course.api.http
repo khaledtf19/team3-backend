@@ -1,0 +1,41 @@
+# =========== Testing categories routes via REST client =========== #
+@host = http://localhost:5000/api/courses
+@query = name[startsWith]=S&page=1&limit=3
+@body= {"teacherId":"33bdee5b-e520-41ed-962a-d45e017b7706","skillName":"CSS","description":"CSS description","pourcent":80}
+
+model Course {
+  teacherId      String
+  title          String
+  description    String
+  imgCover       String?
+  published      Boolean?        @default(false)
+  price          Int             @default(0)
+  hasCertificate Boolean         @default(false)
+  coursProgress  CoursProgress[]
+  Student        Student[]
+  courseReviews  CoursReview[]
+  subCategories  subCategories[]
+  courseSteps    CourseStep[]
+}
+
+### Get all courses
+GET {{host}}
+### Get a course by ID 
+GET {{host}}/de994507-f13b-4b74-be9e-8b06b84c4fd7
+### Delete a course by ID
+DELETE {{host}}/ccc21050-78e2-4d8e-9e07-b4480d1c78f5
+### Update a course
+PUT {{host}}/de994507-f13b-4b74-be9e-8b06b84c4fd7
+Content-Type: application/json
+
+{"pourcent":100}
+### Create a course
+POST {{host}}/
+Content-Type: application/json
+
+{
+  "teacherId":"33bdee5b-e520-41ed-962a-d45e017b7706",
+  "skillName":"CSS",
+  "description":"CSS description",
+  "pourcent":80
+}

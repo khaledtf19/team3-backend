@@ -1,0 +1,22 @@
+# =========== Testing categories routes via REST client =========== #
+@host = http://localhost:5000/api/subcategories
+@query = name[startsWith]=S&page=1&limit=3
+### Get all categories
+GET {{host}}
+### Get a category by ID
+GET {{host}}/0231beb1-39ed-4b44-b3c4-a9fbdbd3741f
+### Delete a category by ID
+DELETE {{host}}/17e1a251-2a90-4c74-b70b-41798be64600
+### Update a category
+PUT {{host}}/0231beb1-39ed-4b44-b3c4-a9fbdbd3741f
+Content-Type: application/json
+
+{"name":"Samsung"}
+### Create a category
+POST {{host}}/
+Content-Type: application/json
+
+{
+  "categoryId": "83a7d586-519d-46f6-8fdf-870de3f10cf8",
+  "name":"Xiaomi"
+}

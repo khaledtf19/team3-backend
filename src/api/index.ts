@@ -1,22 +1,25 @@
-import express from "express";
-import { prisma } from "../db";
+import express from 'express';
 
-import MessageResponse from "../interfaces/MessageResponse";
-import emojis from "./emojis";
+import categoryRoutes from './categories/category.route';
+import subcategoryRoutes from './subcategories/subcategory.route';
+import userRoutes from './users/user.route';
+import teacherRoutes from './teachers/teacher.route';
+import studentRoutes from './students/student.route';
+import skillRoutes from './skills/skills.route';
+import courseRoutes from './courses/course.route';
 
 const router = express.Router();
 
-router.get<{}>("/", async (req, res) => {
-  const newUser = await prisma.user.create({
-    data: {
-      email: "khaledtf19@gmail.com",
-    },
-  });
-  console.log(newUser);
-
-  res.json({ user: newUser });
+router.get('/', (req, res) => {
+  res.status(200).json({ message: 'Hello from the app' });
 });
 
-router.use("/emojis", emojis);
+router.use('/categories', categoryRoutes);
+router.use('/subcategories', subcategoryRoutes);
+router.use('/users', userRoutes);
+router.use('/teachers', teacherRoutes);
+router.use('/students', studentRoutes);
+router.use('/skills', skillRoutes);
+router.use('/courses', courseRoutes);
 
 export default router;

@@ -1,0 +1,34 @@
+# =========== Testing categories routes via REST client =========== #
+@host = http://localhost:5000/api/skills
+@query = name[startsWith]=S&page=1&limit=3
+@body= {"teacherId":"33bdee5b-e520-41ed-962a-d45e017b7706","skillName":"CSS","description":"CSS description","pourcent":80}
+
+# model Skills {
+#   teacherId   String
+#   skillName   String
+#   description String?
+#   pourcent    Int      @default(100)
+# }
+
+# "33bdee5b-e520-41ed-962a-d45e017b7706"
+### Get all categories
+GET {{host}}
+### Get a category by ID 
+GET {{host}}/de994507-f13b-4b74-be9e-8b06b84c4fd7
+### Delete a category by ID
+DELETE {{host}}/ccc21050-78e2-4d8e-9e07-b4480d1c78f5
+### Update a category
+PUT {{host}}/de994507-f13b-4b74-be9e-8b06b84c4fd7
+Content-Type: application/json
+
+{"pourcent":100}
+### Create a category
+POST {{host}}/
+Content-Type: application/json
+
+{
+  "teacherId":"33bdee5b-e520-41ed-962a-d45e017b7706",
+  "skillName":"CSS",
+  "description":"CSS description",
+  "pourcent":80
+}

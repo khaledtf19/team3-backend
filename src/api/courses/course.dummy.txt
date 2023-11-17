@@ -1,0 +1,36 @@
+{
+  "teacherId": "teacher_id_here",
+  "title": "Introduction to Programming",
+  "description": "Learn the basics of programming",
+  "hasCertificate": true,
+  "price": 49.99,
+  "published": true,
+  "imgCover": "course_image.jpg",
+  "courseSteps": [
+    {
+      "step": 1,
+      "title": "Getting Started",
+      "content": "Introduction and setup",
+      "imgCover": "step_image_1.jpg",
+      "video": {
+        "duration": 20,
+        "title": "Video Title 1",
+        "description": "Introduction for course",
+        "videoLink": "url_of_video_1"
+      }
+    },
+    {
+      "step": 2,
+      "title": "Basic Concepts",
+      "content": "Fundamental programming concepts",
+      "imgCover": "step_image_2.jpg",
+      "video": {
+        "duration": 25,
+        "title": "Video Title 2",
+        "description": "Exploring basic concepts",
+        "videoLink": "url_of_video_2"
+      }
+    }
+  ],
+  "selectedSubCategories": ["sub_category_id_1", "sub_category_id_2"]
+}
